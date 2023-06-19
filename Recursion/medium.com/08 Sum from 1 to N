@@ -1,0 +1,33 @@
+How to calculate the sum of arithmetic series from 1 to N?
+
+public class Main {
+    public static void main(String[] args) {
+        int N = 10; // the value of N
+        int sum = calculateArithmeticSeriesSum(1, N);
+        System.out.println("Sum of the arithmetic series from 1 to " + N + ": " + sum);
+    }
+
+    public static int calculateArithmeticSeriesSum(int currentNumber, int N) {
+        if (currentNumber == N) {
+            return currentNumber;
+        } else {
+            return currentNumber + calculateArithmeticSeriesSum(currentNumber + 1, N);
+        }
+    }
+}
+
+=============================================
+public class Main {
+    public static void main(String[] args) {
+        int N = 10; // the value of N
+        int sum = calculateArithmeticSeriesSum(N);
+        System.out.println("Sum of the arithmetic series from 1 to " + N + ": " + sum);
+    }
+
+    public static int calculateArithmeticSeriesSum(int N) {
+        int firstTerm = 1;
+        int lastTerm = N;
+        int sum = (N / 2) * (firstTerm + lastTerm);
+        return sum;
+    }
+}
