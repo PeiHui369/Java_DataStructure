@@ -1,0 +1,31 @@
+How to print digitsToWords(int number) for example digitToWords(321) should print three or two ones? (solution)
+
+public class Main {
+    private static final String[] digitWords = {
+            "zero", "one", "two", "three", "four",
+            "five", "six", "seven", "eight", "nine"
+    };
+
+    public static void main(String[] args) {
+        digitsToWords(321);
+    }
+
+    public static void digitsToWords(int number) {
+        if (number == 0) {
+            System.out.println(digitWords[0]);
+            return;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        // Convert each digit to word and append to the result
+        while (number > 0) {
+            int digit = number % 10;
+            result.insert(0, digitWords[digit]);
+            result.insert(0, " ");
+            number /= 10;
+        }
+
+        System.out.println(result.toString().trim());
+    }
+}
