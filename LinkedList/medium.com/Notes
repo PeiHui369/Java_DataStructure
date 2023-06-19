@@ -7,7 +7,9 @@ class Main {
               int[] keys = {1,2,3,4,5};  //input keys
               Node head = null;          //point to the head node of the linked list
               for (int i = keys.length-1; i>=0; i--) {head = newNode(keys[i], head);} //Construct a linked list
-              /*Special code function*/
+              /*Special code function
+              head = function(head);
+              */
               printList(head)             //print linked list
         }
               
@@ -346,3 +348,334 @@ public static Node copyList(Node head){
 #2. Fast/Slow Pointer Strategy
 
 11 Remove Duplicates
+//Remove duplicates from a sorted list
+    public static Node removeDuplicates(Node head)
+    {
+        //do nothing if the list is empty
+        if (head == null) {return null;}
+        
+        Node current = head;
+        
+        //compare the current node with the next node
+        while (current.next != null)
+        {
+            if (current.data == current.next.data)
+            {
+                Node nextNext = current.next.next;
+                current.next = nextNext;
+            }
+            else{
+                current = current.next;             //only advance if no deletion
+            }
+        }
+        return head;
+    }
+
+12 Move front of b to front of a
+public static void main(String[] args) {
+        //input keys
+        int[] keys = {1,2,3};
+        //construct the first linked list
+        Node a = null;
+        for (int i = keys.length-1; i>=0; i--){
+            a = new Node(keys[i], a);
+        }
+        //construct a second linked list
+        Node b = null;
+        for (int i = 0; i<keys.length; i++){
+            b = new Node(2 * keys[i], b);
+        }
+        
+        if (b!=null){
+            //take the node from the front of list 'b', and move it to the front of the list 'a'
+            Node newNode = b;       //the front source node
+            b = b.next;             //advance the source
+            newNode.next = a;       //link the old dest off the new node
+            a = newNode;            //move dest to point to the new node
+        }
+        /*print both list*/
+    }
+
+13 Move even nodes to the end of the linked list in reverse order
+//Function to rearrange the given list such that every even node will be moved to the end of the list in reverse order
+    public static void rearrange(Node head){
+        //empty list
+        if (head == null) {return;}
+
+        //maintain 2 lists, odd and even
+        Node odd = head;
+        Node even = null, prev = null;
+
+        //do for each odd node
+        while (odd != null && odd.next != null) {
+            //"move" next node (Which will be even) to the front of even list
+            if (odd.next != null){
+                Node newNode = odd.next;
+                odd.next = odd.next.next;
+
+                newNode.next = even;
+                even = newNode;
+                //newNode=2, odd.next = 3 -> 1,3; newNode.next = even -> 2,null; even = 2
+            }
+            //update 'prev' and move to the next odd node
+            prev = odd;
+            odd = odd.next;
+        }
+        //append even list to odd list
+        if (odd != null) {odd.next = even;}
+        else {prev.next = even;}
+    }
+
+14 Split into 2 lists contains alternating elements
+1. moveNode() -> reverse order
+public static Node[] alternatingSplit(Node source){
+        //Split the nodes into 'a' and 'b' lists
+        Node a = null;
+        Node b = null;
+        Node current = source;
+        
+        while (current != null){
+            //Move a node to 'a'
+            Node newNode = current; //the front source node
+            current = current.next; //advance the source
+            newNode.next = a;       //link the old dest off the new node
+            a = newNode;            //move dest to point to the new node
+            
+            if(current != null){
+                //Move a node to 'b'
+                newNode = current;  
+                current = current.next;
+                newNode.next = b;
+                b = newNode;
+            }
+        }
+        return new Node[] {a,b};
+    }
+
+2. Using Dummy Nodes
+public static Node[] alternatingSplit(Node source)
+    {
+        Node aDummy = new Node();
+        Node aTail = aDummy;            // points to the last node in `a`
+        aDummy.next = null;
+ 
+        Node bDummy = new Node();
+        Node bTail = bDummy;            // points to the last node in `b`
+        bDummy.next = null;
+ 
+        Node current = source;
+ 
+        while (current != null)
+        {
+            // add at `a` tail
+ 
+            Node newNode = current;
+            current = current.next;
+ 
+            newNode.next = aTail.next;
+            aTail.next = newNode;
+ 
+            aTail = aTail.next;         // advance the `a` tail
+            if (current != null)
+            {
+                // add at `b` tail
+ 
+                newNode = current;
+                current = current.next;
+ 
+                newNode.next = bTail.next;
+                bTail.next = newNode;
+ 
+                bTail = bTail.next;     // advance the `b` tail
+            }
+        }
+ 
+        return new Node[] { aDummy.next, bDummy.next };
+    }
+
+3. Recursion
+    // Recursive function to split a given linked list into two lists where
+    // each list containing alternating elements from the original list.
+    // The solution maintains the same order as the source list
+    public static void alternatingSplit(Node odd, Node even)
+    {
+        if (odd == null || even == null) {
+            return;
+        }
+ 
+        if (odd.next != null) {
+            odd.next = odd.next.next;
+        }
+ 
+        if (even.next != null) {
+            even.next = even.next.next;
+        }
+ 
+        alternatingSplit(odd.next, even.next);
+    }
+
+    /*
+        Given the source list, split its nodes into two shorter lists.
+        If we number the elements 0, 1, 2, … then all the even elements
+        should go in the first list and all the odd elements in the second.
+        The elements in the new lists may be in any order.
+    */
+    public static Node[] alternatingSplit(Node source)
+    {
+        if (source == null) {
+            return new Node[] {null, null};
+        }
+ 
+        Node aRef = source;
+        Node bRef = source.next;
+        alternatingSplit(aRef, bRef);
+ 
+        return new Node[] { aRef, bRef };
+    }
+
+15 Merging list alternately
+1 Using Dummy Node
+    // Function to construct a linked list by merging alternate nodes of
+    // two given linked lists using a dummy node
+    
+public static Node shuffleMerge(Node a, Node b)
+    {
+        Node dummy = new Node();
+        Node tail = dummy;
+ 
+        while (true)
+        {
+            // empty list cases
+            if (a == null)
+            {
+                tail.next = b;
+                break;
+            }
+ 
+            else if (b == null)
+            {
+                tail.next = a;
+                break;
+            }
+ 
+            // common case: move two nodes to the tail
+            else {
+                tail.next = a;
+                tail = a;
+                a = a.next;
+ 
+                tail.next = b;
+                tail = b;
+                b = b.next;
+            }
+        }
+ 
+        return dummy.next;
+    }
+
+2 Recursion
+//Recursive function to construct a linked list by merging alternate nodes of 2 given linked lists
+    public static Node shuffleMerge(Node a, Node b){
+        //see if either list is empty
+        if (a==null){return b;}
+        if (b==null){return a;}
+        
+        //it turns out to be convenient to do the recursive call first;
+        //otherwise, 'a.next' and 'b.next' need temporary storage
+        Node recur = shuffleMerge(a.next, b.next);
+        Node result = a;    //one node from 'a'
+        a.next = b;         //one from 'b'
+        b.next = recur;     //then the 'rest'
+        return result;
+    }
+
+16 Merge 2 sorted linked lists into 1
+1. Using Dummy Node
+    public static Node sortedMerge(Node a, Node b){
+        //a dummy first node to hang the result on
+        Node dummy = new Node();
+        //points to the last result node - so 'tail.next'is the place to add new nodes to the result
+        Node tail = dummy;
+
+        while (true){
+            //if either list runs out, use the other list
+            if(a==null){
+                tail.next = b;
+                break;
+            }
+            else if(b==null){
+                tail.next = a;
+                 break;
+            }
+
+            if(a.data <= b.data){
+                if(a!=null){
+                    Node newNode = a;
+                    a = a.next;
+
+                    newNode.next = tail.next;
+                    tail.next = newNode;
+                }
+            }else{
+                if(b!=null){
+                    Node newNode = b;
+                    b = b.next;
+
+                    newNode.next = tail.next;
+                    tail.next = newNode;
+                }
+            }
+            tail = tail.next;
+        }
+        return dummy.next;
+    }
+
+2. Recursion
+public static Node sortedMerge(Node a, Node b){
+        //base cases
+        if (a==null) {return b;}
+        else if (b==null) {return a;}
+        
+        Node result;
+        
+        //pick either 'a' or 'b', and recur
+        if (a.data <= b.data){
+            result = a;
+            result.next = sortedMerge(a.next, b);
+        }else{
+            result = b;
+            result.next = sortedMerge(a, b.next);
+        }
+        return result;
+    }
+
+17 Efficiently merge 'k' sorted linked lists
+//The main function to merge given 'k' sorted linked lists
+    //It takes array 'lists' of size 'k' and generates the sorted output
+    public static Node mergeKLists(Node[] lists){
+        //create an empty min-heap using a comparison object for ordering the min-heap
+        PriorityQueue<Node> pq;
+        pq = new PriorityQueue<>(Comparator.comparingInt(a -> ((Node)a).data));
+        //push the first node of each list into the min-heap
+        pq.addAll(Arrays.asList(lists).subList(0, lists.length));
+        //Take 2 pointers, head and tail, where the head points to the first node of the output list and tail points to its last node
+        Node head = null, last = null;
+        //run till min-heap is empty
+        while (!pq.isEmpty()) {
+            //extract the minimum node from the min-heap
+            Node min = pq.poll();
+            //add the minimum node to the output list
+            if (head == null) {
+                head = last = min;
+            } else {
+                last.next = min;
+                last = min;
+            }
+            //take the next node from the "same" list and insert it into the min-heap
+            if (min.next != null) {
+                pq.add(min.next);
+            }
+        }
+        //return head node of the merged list
+        return head;
+        }
