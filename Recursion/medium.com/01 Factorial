@@ -1,0 +1,71 @@
+import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+/**
+ * Java Program to calculate factorial using iteration and recursion
+ * 
+ * @author WINDOWS 8
+ *
+ */
+public class FactorialTest {
+
+    public static void main(String args[]) {
+       
+        System.out.println("factorial of 1 using recursion : " 
+                  + factorial(1));
+        System.out.println("factorial of 1 using iteration : " 
+                  + factorial(1L));
+        
+        System.out.println("factorial of 5 using recursion : " 
+                          + factorial(5));
+        System.out.println("factorial of 5 using loop : "  
+                             + factorial(5L));       
+        
+        System.out.println("factorial of 7 using recursive algorithm : "
+                      + factorial(7));
+        System.out.println("factorial of 7 using iterative algorithm : " 
+                      + factorial(7L)); 
+        
+    }
+
+  
+    /**
+     * Java method to calculate factorial of given integer using recursion.
+     * @param number
+     * @return factorial of number
+     */
+    public static long factorial(int number){
+        
+        //base case - factorial of 0 or 1 is 1
+        if(number <=1){
+            return 1;
+        }
+        
+        return number*factorial(number - 1);
+    }
+    
+    /**
+     * Java method to calculate factorial of given number using iteration
+     * @param input
+     * @return factorial of input
+     */
+    public static long factorial(long input){
+        long factorial = 1L;
+        for(long i= input; i > 0; i--){
+            factorial = factorial * i;
+        }
+        
+        return factorial;
+    }
+    
+}
+
+Output :
+factorial of 1 using recursion : 1
+factorial of 1 using iteration : 1
+factorial of 5 using recursion : 120
+factorial of 5 using loop : 120
+factorial of 7 using recursive algorithm : 5040
+factorial of 7 using iterative algorithm : 5040
