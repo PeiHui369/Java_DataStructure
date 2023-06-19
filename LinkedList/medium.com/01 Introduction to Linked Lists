@@ -1,0 +1,22 @@
+Linked Lists
+
+@ Benefits
+i. Easily inserted/removed without reallocation/reorganization
+- Items need not be stored contiguously in memory
+ii. Allow insertion & removal of nodes at any point
+
+@ Types
+i. Singly Linked List
+data field + next field
+ii. Doubly Linked List
+data field + next field + prev field
+iii. Circular Linked List
+- Tail linked back to head
+- Ability to traverse full list beginning at any given node
+
+@ Application
+i. Stack
+ii. Queue
+iii. Maintain references to active processes, threads & other dynamic objects
+iv. Hash table
+v. Binary tree
