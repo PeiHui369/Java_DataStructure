@@ -1,3 +1,30 @@
+public class Main {
+    public static void main(String[] args) {
+        int number = 12345;
+        int reversedNumber = reverseNumber(number);
+        System.out.println("Original number: " + number);
+        System.out.println("Reversed number: " + reversedNumber);
+    }
+
+    public static int reverseNumber(int number) {
+        return reverseNumberRecursive(number, 0);
+    }
+
+    private static int reverseNumberRecursive(int number, int reversedNumber) {
+        if (number == 0) {
+            return reversedNumber;
+        } else {
+            int lastDigit = number % 10;
+            reversedNumber = reversedNumber * 10 + lastDigit;
+            return reverseNumberRecursive(number / 10, reversedNumber);
+        }
+    }
+}
+
+The reverseNumberRecursive method performs the actual recursive reversal. It extracts the last digit from the number, multiplies the reversedNumber by 10, and adds the last digit to it. Then it makes a recursive call with the updated number (after removing the last digit) and the updated reversedNumber. The recursion continues until the number becomes 0, at which point the reversed number is returned.
+=================================================
+@ Iteration
+
 import java.util.Scanner;
 
 /**
