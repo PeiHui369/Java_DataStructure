@@ -1,0 +1,126 @@
+Rearrange a given linked list such that every even node will be moved to the end of the list in reverse order.
+
+For example,
+
+Input:  1 —> 2 —> 3 —> 4 —> 5 —> 6 —> 7 —> null
+ 
+Output: 1 —> 3 —> 5 —> 7 —> 6 —> 4 —> 2 —> null
+
+===================================================
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(String msg, Node head)
+    {
+        System.out.print(msg);
+ 
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+        System.out.println("null");
+    }
+ 
+    // Function to rearrange the given list such that every even node will be
+    // moved to the end of the list in reverse order.
+    public static void rearrange(Node head)
+    {
+        // empty list
+        if (head == null) {
+            return;
+        }
+ 
+        // maintain two lists, odd and even
+        Node odd = head;
+        Node even = null, prev = null;
+ 
+        // do for each odd node
+        while (odd != null && odd.next != null)
+        {
+            // "move" next node (which will be even)
+            // to the front of even list
+            if (odd.next != null)
+            {
+                Node newNode = odd.next;
+                odd.next = odd.next.next;
+ 
+                newNode.next = even;
+                even = newNode;
+            }
+ 
+            // update `prev` and move to the next odd node
+            prev = odd;
+            odd = odd.next;
+        }
+ 
+        // append even list to odd list
+        if (odd != null) {
+            odd.next = even;
+        }
+        else {
+            prev.next = even;
+        }
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 3, 4, 5, 6, 7 };
+ 
+        // construct the first linked list
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        printList("Before: ", head);
+ 
+        // rearrange the references to the given list
+        rearrange(head);
+ 
+        printList("After: ", head);
+    }
+}
+---------------------------------------------------
+Let's assume we have the following linked list as input: `1 -> 2 -> 3 -> 4 -> 5 -> 6`
+
+1. First, we check if the list is empty. If it is, we return immediately.
+
+2. We initialize two pointers, `odd` and `even`, to keep track of the odd and even nodes respectively. We also initialize `prev` to keep track of the previous odd node.
+
+3. We enter a loop that iterates through the list while the `odd` pointer is not null and the next odd node is not null.
+
+4. Inside the loop, we create a new node `newNode` and assign it the value of the next node of the `odd` pointer. Then, we update the `odd` pointer to skip the `newNode` by assigning `odd.next` to `odd.next.next`.
+
+5. We update the `next` pointer of the `newNode` to point to the current `even` list, effectively moving the `newNode` to the front of the `even` list.
+
+6. We update the `even` pointer to point to the `newNode`, making it the new head of the `even` list.
+
+7. We update the `prev` pointer to point to the current `odd` node, preparing it for the next iteration.
+
+8. We move the `odd` pointer to the next odd node.
+
+9. After the loop finishes, we have separated the odd and even nodes into two separate lists. Now we need to append the `even` list to the end of the `odd` list.
+
+10. We check if the `odd` pointer is not null. If it's not null, it means there are remaining odd nodes after the loop. In this case, we append the `even` list by assigning `odd.next` to `even`.
+
+11. If the `odd` pointer is null, it means the loop has processed all the odd nodes. In this case, we append the `even` list by assigning `prev.next` to `even`.
+
+The final result will be the modified linked list with the even nodes moved to the end in reverse order: `1 -> 3 -> 5 -> 6 -> 4 -> 2`
+
+Note: The code assumes the existence of a `Node` class with properties `data` and `next` to represent the nodes of the linked list. The code provided focuses on the rearrangement logic and does not include the implementation of the `Node` class or the creation and traversal of the
