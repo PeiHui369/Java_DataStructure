@@ -1,0 +1,60 @@
+How to calculate the power of a number like power(int number, int power) like power(2, 3) should return 8? 
+public class Main {
+    public static void main(String[] args) {
+        int number = 2;
+        int power = 4;
+        int result = calculatePower(number, power);
+        System.out.println(number + " raised to the power of " + power + ": " + result);
+    }
+
+    public static int calculatePower(int number, int power) {
+        if (power == 0) {
+            return 1;
+        } else {
+            return number * calculatePower(number, power - 1);
+        }
+    }
+}
+
+=====================================================================
+package tool;
+
+/**
+ * 
+ * A simple Java Program to implement a power function pow(x, y) which should
+ * return x^y.
+ * 
+ * Input : (2, 3) Output: 8
+ */
+public class Hello {
+
+  public static void main(String[] args) {
+
+    System.out.println("2 to the power 3 : = " + power(2, 3));
+    System.out.println("3 to the power 3 : = " + power(3, 3));
+    System.out.println("2 to the power 5 : = " + power(2, 5));
+    System.out.println("5 to the power 2 : = " + power(5, 2));
+    System.out.println("9 to the power 2 : = " + power(9, 2));
+  }
+
+  /*
+   * Calculate power using multiplication operator
+   */
+  public static long power(int x, int y) {
+    long result = x;
+
+    for (int i = 1; i < y; i++) {
+      result = result * x;
+    }
+
+    return result;
+  }
+
+}
+
+Output:
+2 to the power 3 : = 8
+3 to the power 3 : = 27
+2 to the power 5 : = 32
+5 to the power 2 : = 25
+9 to the power 2 : = 81
