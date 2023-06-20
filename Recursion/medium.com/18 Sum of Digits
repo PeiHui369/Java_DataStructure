@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class SumOfDigits {
+
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Please enter a number to calculate the sum of digits:");
+        int number = sc.nextInt();
+
+        int sum = calculateSumOfDigits(number);
+        System.out.printf("Sum of digits of number %d is %d%n", number, sum);
+
+        sc.close();
+    }
+
+    public static int calculateSumOfDigits(int number) {
+        if (number == 0) {
+            return 0; // Base case: reached the end of digits
+        }
+        
+        int lastDigit = number % 10;
+        int remainingDigits = number / 10;
+
+        return lastDigit + calculateSumOfDigits(remainingDigits); // Recursive call
+    }
+}
+
+--------------------------------------------------------
+@ Without Recursion
+
+import java.io.Console;
+import java.util.Scanner;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+/**
+*
+* How to find sum of digits in Java
+*
+* @author Javin Paul
+*/
+public class SumOfDigits{
+
+    public static void main(String args[]) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Please enter a number to calculate sum of digits");
+        int number = sc.nextInt();
+
+        // Remember number/10 reduces one digit from number
+        // and number%10 gives you last digit
+        int sum = 0;
+        int input = number;
+        while (input != 0) {
+            int lastdigit = input % 10;
+            sum += lastdigit;
+            input /= 10;
+        }
+
+        System.out.printf("Sum of digits of number %d is %d", number, sum);
+
+        // closing Scanner to prevent resource leak
+        sc.close();
+
+    }
+
+}
+
