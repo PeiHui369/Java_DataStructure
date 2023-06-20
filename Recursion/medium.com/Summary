@@ -206,8 +206,245 @@ public static long power (int x, int y){
     }
 */
 
+@10 GCD using Euclid's algo
+private static int findGCD(int number1, int number2){
+        if(number2 == 0){
+            return number1;
+        }
+        return findGCD(number2, number1%number2);
+    }
 
+@11 BST PreOrder Traversal (NLR)
+private void preOrder(TreeNode node){
+        if(node == null) {       //Reached the leaf node and cannot go deeper -> backtrack & go to another path
+            return;
+        }
+        System.out.printf("%s ", node.data);
+        preOrder(node.left);
+        preOrder(node.right);
+    }
 
+/*
+public void preOrderWithoutRecursion(){
+        Stack <TreeNode> nodes = new Stack<>();
+        nodes.push(root);
+        while(!nodes.isEmpty()){
+            TreeNode current = nodes.pop();
+            System.out.printf("%s", current.data);
+            
+            if(current.right!=null){
+                nodes.push(current.right);
+            }
+            if(current.left!=null){
+                nodes.push(current.left);
+            }
+        }
+    }
+*/
 
+@12 Convert Decimal to Binary
+public static String convertToBinary(int decimal){
+        if(decimal == 0){
+            return "0"; //base case: decimal number is 0
+        }else{
+            int remainder = decimal % 2;
+            int quotient = decimal/2;
+            String binary = convertToBinary(quotient); //recursive call
+            return binary + String.valueOf(remainder);
+        }
+    }
+//Main: String binary = convertToDecimal(num) -> binary.substring(1)
+/*
+public static void convert(int input) {
+        int copyOfInput = input;
+        StringBuilder sb = new StringBuilder();
+ 
+        while (copyOfInput > 0) {
+            byte bit = (byte) (copyOfInput % 2);
+            sb.append(bit);
+            copyOfInput = copyOfInput / 2;
+        }
+ 
+        System.out.printf("\nDecimal number %d in Binary format is %s %n", 
+                            input, sb.toString());
+    }
+*/
 
+13 BST PostOrder Traversal (LRN)
+private void postOrder(TreeNode node){
+        if (node == null) {
+            return;
+        }
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.printf("%s ", node.data);
+    }
 
+/*
+public void postOrderWithoutRecursion(){
+        Stack nodes = new Stack<>();
+        nodes.push(root);
+        
+        while(!nodes.isEmpty()){
+            TreeNode current = nodes.peek();
+            
+            if(current.isLeaf()){
+                TreeNode node = nodes.pop();
+                System.out.printf("%s ", node.data);
+            }else{
+                if(current.right != null){
+                    nodes.push(current.right);
+                    current.right = null;
+                }
+                if(current.left != null){
+                    nodes.push(current.left);
+                    current.left = null;
+                }
+            }
+        }
+    }
+*/
+
+14 BT InOrder Traversal (LNR)
+    private void inOrder(TreeNode node){
+        if (node == null){
+            return;
+        }
+
+        inOrder(node.left);
+        System.out.printf("%s ", node.data);
+        inOrder(node.right);
+    }
+
+/*
+    public void inOrderWithoutRecursion(){
+        Stack nodes = new Stack<>();
+        TreeNode current = root;
+        
+        while (!nodes.isEmpty() || current != null){
+            if(current != null){
+                nodes.push(current);
+                current = current.left;
+            }else{
+                TreeNode node = nodes.pop();
+                System.out.printf("%s ", node.data);
+                current = node.right;
+            }
+        }
+    }
+*/
+
+15 Count no. of leaf nodes
+private int countLeaves (TreeNode node){
+        if (node == null){
+            return 0;
+        }
+        if(node.isLeaf()){
+            return 1;
+        }else{
+            return countLeaves(node.left) + countLeaves(node.right);
+        }
+    }
+
+    public int countLeafNodesRecursively(){
+        return countLeaves(root);
+    }
+
+/*
+public int countLeafNodes(){
+        if (root == null) {
+            return 0;
+        }
+        
+        Stack stack = new Stack<>();
+        stack.push(root);
+        int count = 0;
+        
+        while (!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            if (node.left != null){
+                stack.push(node.left);
+            }
+            if (node.right != null){
+                stack.push(node.right);
+            }
+            if(node.isLeaf()){
+                count++;
+            }
+            return count;
+        }
+    }
+*/
+
+@16 Binary Search Algorithm
+public static int performBinarySearch(int[] input, int number) {
+        return binarySearchRecursive(input, number, 0, input.length - 1);
+    }
+
+private static int binarySearchRecursive(int[] input, int number, int low, int high){
+        if (low > high) {return -1;} //Base case: element not found
+        int middle = (low + high)/2;
+        if(input[middle] == number){
+            return middle; //Base case: element found
+        }else if (input[middle] < number){
+            return binarySearchRecursive(input, number,middle+1, high);
+        }else{
+            return binarySearchRecursive(input, number, low, middle-1)
+        }
+    }
+
+/*
+public static int performBinarySearch(int[] input, int number){
+        int low = 0;
+        int high = input.length - 1;
+
+        while (high >= low){
+            int middle = (low + high)/2;
+            if (input[middle] == number){
+                return middle;
+            }else if(input[middle] < number){
+                low = middle + 1;
+            }else if (input[middle] > number){
+                high = middle - 1;
+            }
+        }
+        return -1;
+    }
+*/
+
+@17 String Permutations
+public static void permutation(String input){
+        permutation("", input);
+    }
+
+    private static void permutation(String perm, String word){
+        if (word.isEmpty()) {
+            System.err.println(perm + word);
+        }else{
+            for (int i = 0; i < word.length(); i++){
+                permutation(perm + word.charAt(i), word.substring(0,i) + word.substring(i+1, word.length()));
+            }
+        }
+    }
+
+@18 Sum of Digits
+public static int calculateSumOfDigits(int number) {
+        if (number == 0) {
+            return 0; // Base case: reached the end of digits
+        }
+
+        int lastDigit = number % 10;
+        int remainingDigits = number / 10;
+
+        return lastDigit + calculateSumOfDigits(remainingDigits); // Recursive call
+    }
+
+/*
+        int sum = 0;
+        int input = number;
+        while (input != 0) {
+            int lastdigit = input % 10;
+            sum += lastdigit;
+            input /= 10;
+        }
+*/
