@@ -1,0 +1,75 @@
+To remove a given element from a linked list using recursion, you can define a recursive function that traverses the list, finds the target element, and removes it.
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+
+public class RemoveElementFromLinkedList {
+    public static ListNode removeElement(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+
+        if (head.val == val) {
+            return removeElement(head.next, val);
+        }
+
+        head.next = removeElement(head.next, val);
+        return head;
+    }
+
+    public static void printList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        // Create the linked list: 1 -> 2 -> 3 -> 4 -> 5
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+        head.next.next.next.next = new ListNode(5);
+
+        int target = 3;
+
+        System.out.println("Original List:");
+        printList(head);
+
+        // Remove the target element from the list
+        ListNode newHead = removeElement(head, target);
+
+        System.out.println("List after removing " + target + ":");
+        printList(newHead);
+    }
+}
+
+In this code, the ListNode class represents a node in the linked list. It has an integer value (val) and a reference to the next node (next).
+
+The removeElement function takes the head of the linked list (head) and the target value (val) as input and returns the modified linked list with the target element removed. It uses recursion to traverse the list and remove the target element.
+
+The base case for the recursion is when the head of the list becomes null, indicating the end of the list. In this case, we return null.
+
+In the recursive cases, we check if the value of the current node (head.val) is equal to the target value (val). If they are equal, we skip the current node by recursively calling removeElement with the next node as the new head. This effectively removes the target element from the list.
+
+If the values are not equal, we keep the current node and update its next reference to the result of calling removeElement on the next node. This ensures that the rest of the list is traversed and modified accordingly.
+
+The function continues the recursive process until the entire list is traversed, resulting in a modified list with the target element removed.
+
+The printList function is a utility method that traverses the linked list and prints the values of the nodes.
+
+In the main method, we create an example linked list (1 -> 2 -> 3 -> 4 -> 5). We define a target value (3) and print the original list. Then, we call the removeElement function to remove the target element from the list. Finally, we print the modified list after removing the target element.
+
+
+
+
+
