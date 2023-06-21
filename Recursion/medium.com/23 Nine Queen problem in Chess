@@ -1,0 +1,99 @@
+
+The Nine Queens problem is a classic puzzle where the task is to place nine queens on a chessboard in such a way that no two queens threaten each other. 
+In other words, no two queens should be in the same row, column, or diagonal.
+
+public class NineQueens {
+    private static final int BOARD_SIZE = 9;
+    private static final char QUEEN = 'Q';
+    private static final char EMPTY = '.';
+
+    private static char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
+
+    public static void main(String[] args) {
+        initializeBoard();
+        solveNQueens(0);
+    }
+
+    private static void initializeBoard() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                board[i][j] = EMPTY;
+            }
+        }
+    }
+
+    private static void solveNQueens(int column) {
+        if (column == BOARD_SIZE) {
+            // All queens have been successfully placed, print the solution
+            printBoard();
+            return;
+        }
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            if (isSafe(row, column)) {
+                // Place the queen at (row, column)
+                board[row][column] = QUEEN;
+
+                // Recursively solve the problem for the next column
+                solveNQueens(column + 1);
+
+                // Remove the queen from (row, column) to explore other possibilities
+                board[row][column] = EMPTY;
+            }
+        }
+    }
+
+    private static boolean isSafe(int row, int column) {
+        // Check if no queens threaten the current position
+
+        // Check the row
+        for (int i = 0; i < column; i++) {
+            if (board[row][i] == QUEEN) {
+                return false;
+            }
+        }
+
+        // Check the upper diagonal
+        for (int i = row, j = column; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == QUEEN) {
+                return false;
+            }
+        }
+
+        // Check the lower diagonal
+        for (int i = row, j = column; i < BOARD_SIZE && j >= 0; i++, j--) {
+            if (board[i][j] == QUEEN) {
+                return false;
+            }
+        }
+
+        // The current position is safe
+        return true;
+    }
+
+    private static void printBoard() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+}
+
+In this implementation, the solveNQueens method uses backtracking to recursively solve the problem. 
+It starts by iterating over the rows of the current column. 
+If it finds a safe position to place the queen, 
+it marks that position on the board and moves to the next column by making a recursive call. 
+If it reaches the last column and successfully places all nine queens, 
+it prints the solution.
+After exploring all possibilities, 
+it backtracks by removing the queen from the current position and 
+continues the loop to explore other positions.
+
+The isSafe method checks if a given position is safe to place a queen by 
+checking the row, upper diagonal, and lower diagonal 
+to ensure no other queens are present in those positions.
+
+Finally, the printBoard method is used to print
