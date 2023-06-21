@@ -1,0 +1,93 @@
+To implement the merge sort algorithm using recursion, you need to divide the array into smaller subarrays, recursively sort them, and then merge them back together.
+
+import java.util.Arrays;
+
+public class MergeSort {
+    public static void mergeSort(int[] array) {
+        if (array.length <= 1) {
+            return; // Base case: array is already sorted or empty
+        }
+        
+        int mid = array.length / 2;
+        int[] leftArray = Arrays.copyOfRange(array, 0, mid);
+        int[] rightArray = Arrays.copyOfRange(array, mid, array.length);
+        
+        mergeSort(leftArray); // Recursively sort the left subarray
+        mergeSort(rightArray); // Recursively sort the right subarray
+        
+        merge(array, leftArray, rightArray); // Merge the sorted subarrays
+    }
+    
+    private static void merge(int[] array, int[] leftArray, int[] rightArray) {
+        int leftIndex = 0;
+        int rightIndex = 0;
+        int resultIndex = 0;
+        
+        // Merge the elements from leftArray and rightArray into array in sorted order
+        while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+            if (leftArray[leftIndex] <= rightArray[rightIndex]) {
+                array[resultIndex++] = leftArray[leftIndex++];
+            } else {
+                array[resultIndex++] = rightArray[rightIndex++];
+            }
+        }
+        
+        // Copy any remaining elements from the left subarray
+        while (leftIndex < leftArray.length) {
+            array[resultIndex++] = leftArray[leftIndex++];
+        }
+        
+        // Copy any remaining elements from the right subarray
+        while (rightIndex < rightArray.length) {
+            array[resultIndex++] = rightArray[rightIndex++];
+        }
+    }
+    
+    public static void main(String[] args) {
+        int[] array = {4, 2, 9, 6, 7, 8};
+        mergeSort(array);
+        System.out.println(Arrays.toString(array));
+    }
+}
+
+=======================================================
+@ Without Recursion
+public class Task {
+    public static Integer[] mergeArrayInAscendingOrder(int[] classA, int[] classB) {
+        //merge two Arrays
+        List < Integer > myList = new ArrayList < > ();
+        for (int i: classA) {
+            myList.add(i);
+        }
+        for (int j: classB) {
+            myList.add(j);
+        }
+        Integer[] newArray = new Integer[myList.size()];
+        myList.toArray(newArray);
+        //sort them in ascending order
+        for (int i = 0; i < newArray.length; i++) {
+            for (int j = i; j < newArray.length; j++) {
+                Integer temp = newArray[i];
+                if (newArray[i] > newArray[j]) {
+                    newArray[i] = newArray[j];
+                    newArray[j] = temp;
+                }
+            }
+        }
+        System.out.println(Arrays.toString(newArray));
+        return newArray;
+    }
+    public static void main(String[] args) {
+        int[] classA = {
+            4,
+            2,
+            9
+        };
+        int[] classB = {
+            6,
+            7,
+            8
+        };
+        mergeArrayInAscendingOrder(classA, classB);
+    }
+}
