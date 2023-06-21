@@ -1,0 +1,37 @@
+To calculate the power of three using recursion, you can define a recursive function that repeatedly divides the number by three and multiplies the result
+
+public class PowerOfThree {
+    public static boolean isPowerOfThree(int n) {
+        if (n == 0) {
+            return false;
+        }
+        if (n == 1) {
+            return true;
+        }
+        if (n % 3 != 0) {
+            return false;
+        }
+        return isPowerOfThree(n / 3);
+    }
+
+    public static void main(String[] args) {
+        int number = 27;
+        boolean result = isPowerOfThree(number);
+        System.out.println(number + " is a power of three: " + result);
+    }
+}
+
+In this code, the isPowerOfThree function takes an integer n as input and returns true if n is a power of three, and false otherwise.
+
+The base cases for the recursion are:
+
+If n is zero, it cannot be a power of three, so we return false.
+If n is one, it is considered a power of three (3^0 = 1), so we return true.
+If n is not divisible by three (i.e., n % 3 != 0), it cannot be a power of three, so we return false.
+In the recursive case, we divide n by three (i.e., n / 3) and call the isPowerOfThree function recursively with the updated value. We continue this process until one of the base cases is reached.
+
+In the main method, we provide an example number (27) and call the isPowerOfThree function with this number. The result is then printed to the console. In this example, the output will be 27 is a power of three: true since 27 is equal to 3^3.
+
+
+
+
