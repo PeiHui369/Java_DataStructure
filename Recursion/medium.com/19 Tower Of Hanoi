@@ -1,0 +1,82 @@
+public class TowerOfHanoi {
+
+    public static void moveDisks(int n, String source, String destination, String auxiliary) {
+        if (n == 1) {
+            System.out.println("Move disk from " + source + " to " + destination);
+            return;
+        }
+        
+        moveDisks(n - 1, source, auxiliary, destination);
+        System.out.println("Move disk from " + source + " to " + destination);
+        moveDisks(n - 1, auxiliary, destination, source);
+    }
+
+    public static void main(String[] args) {
+        int numDisks = 3;
+        String sourcePeg = "A";
+        String destinationPeg = "C";
+        String auxiliaryPeg = "B";
+
+        moveDisks(numDisks, sourcePeg, destinationPeg, auxiliaryPeg);
+    }
+}
+
+------------------------------------------------------------
+The Tower of Hanoi problem is a classic mathematical puzzle that involves three pegs and a set of disks of different sizes. The goal is to transfer all the disks from the source peg to the destination peg, using the third peg as an auxiliary, while following three rules:
+
+1. Only one disk can be moved at a time.
+2. Each move consists of taking the top disk from one of the pegs and placing it on top of another peg or on an empty peg.
+3. A larger disk must never be placed on top of a smaller disk.
+
+To solve the Tower of Hanoi problem using recursion, you can follow the steps below:
+
+1. Define a recursive function, let's call it `moveDisks`, that takes the following parameters:
+   - `n`: The number of disks to be moved.
+   - `source`: The source peg from which the disks should be moved.
+   - `destination`: The destination peg where the disks should be moved.
+   - `auxiliary`: The auxiliary peg that can be used for intermediate steps.
+
+2. Base Case:
+   - If `n` is 1, simply move the disk from the source peg to the destination peg.
+   - Return from the function.
+
+3. Recursive Case:
+   - Move `n-1` disks from the source peg to the auxiliary peg using the destination peg as the auxiliary.
+     - Call `moveDisks(n-1, source, auxiliary, destination)`.
+
+   - Move the remaining disk (the largest one) from the source peg to the destination peg directly.
+     - Print or log the move: "Move disk from [source] to [destination]".
+
+   - Move the `n-1` disks from the auxiliary peg to the destination peg using the source peg as the auxiliary.
+     - Call `moveDisks(n-1, auxiliary, destination, source)`.
+
+4. Call the `moveDisks` function initially with the number of disks `n`, the source peg, the destination peg, and the auxiliary peg.
+
+Here's a sample implementation of the Tower of Hanoi problem using recursion in Java:
+
+```java
+public class TowerOfHanoi {
+
+    public static void moveDisks(int n, String source, String destination, String auxiliary) {
+        if (n == 1) {
+            System.out.println("Move disk from " + source + " to " + destination);
+            return;
+        }
+        
+        moveDisks(n - 1, source, auxiliary, destination);
+        System.out.println("Move disk from " + source + " to " + destination);
+        moveDisks(n - 1, auxiliary, destination, source);
+    }
+
+    public static void main(String[] args) {
+        int numDisks = 3;
+        String sourcePeg = "A";
+        String destinationPeg = "C";
+        String auxiliaryPeg = "B";
+
+        moveDisks(numDisks, sourcePeg, destinationPeg, auxiliaryPeg);
+    }
+}
+```
+
+In this example, the Tower of Hanoi problem is solved for 3 disks, where the source peg is "A", the destination peg is "C", and the auxiliary peg is "B". You can modify the `numDisks`, `sourcePeg`, `destinationPeg`, and `auxiliaryPeg` variables according to your needs.
