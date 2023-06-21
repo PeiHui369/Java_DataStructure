@@ -1,0 +1,8 @@
+Arrays.toString()     : This method prints an array
+Arrays.asList()       : This method takes an array and converts it to list
+Arrays.sort()         : This method sorts an array.
+Arrays.compare()      : This method compares two different arrays.
+Arrays.fill()         : This method populates an empty array with the items you put in the method.
+Arrays.equals()       : This method checks if two arrays are equal.
+Arrays.copyOf()       : This method makes another copy of the same array you use this method on.
+Arrays.paralleSort()  : This method sort array using parallel algorithms
