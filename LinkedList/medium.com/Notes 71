@@ -1,0 +1,47 @@
+@70 Convert Multilevel to Singly
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+class Node {
+    int data;
+    Node next, child;
+    
+    Node(int data, Node next, Node child){
+        this.data = data;
+        this.next = next;
+        this.child = child;
+    }
+}
+
+class Main {
+    public static Node convertList(Node head) {
+        Node curr = head;
+        Queue<Node> q = new ArrayDeque<>();
+        while (curr != null) {
+            if(curr.next == null) {
+                curr.next = q.poll();
+            }
+            if (curr.child != null) {
+                q.add(curr.child);
+            }
+            curr = curr.next;
+        }
+        return head;
+    }
+
+    //printList(Node head)
+    
+    public static Node createHorizontalList(int[] input){
+        Node head = null;
+        for(int i = input.length-1; i>=0; i--){
+            head = new Node(input[i], head, null);
+        }
+        return head;
+    }
+    
+    //main
+}
+
+
+@71
+Refer
