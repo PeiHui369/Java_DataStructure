@@ -1,0 +1,110 @@
+Given two linked lists, merge their nodes into the first list by taking nodes alternately between the two lists. If the first list runs out, the remaining nodes of the second list should not be moved.
+
+For example, consider lists {1, 2, 3} and {4, 5, 6, 7, 8}. Merging them should result in {1, 4, 2, 5, 3, 6} and {7, 8}, respectively.
+
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+ 
+    Node() {}
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(String msg, Node head)
+    {
+        System.out.print(msg);
+ 
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+ 
+    // Function to construct a linked list by merging alternate nodes of
+    // two given linked lists using a dummy node
+    public static Node[] merge(Node a, Node b)
+    {
+        Node dummy = new Node();
+        Node tail = dummy;
+ 
+        while (true)
+        {
+            // empty list cases
+            if (a == null)
+            {
+                tail.next = null;   // Note
+                break;
+            }
+            else if (b == null)
+            {
+                tail.next = a;
+                break;
+            }
+            // common case: move two nodes to the tail
+            else {
+                tail.next = a;
+                tail = a;
+                a = a.next;
+ 
+                tail.next = b;
+                tail = b;
+                b = b.next;
+            }
+        }
+ 
+        a = dummy.next;
+        return new Node[] { a, b };
+    }
+ 
+    public static void main(String[] args)
+    {
+        Node a = null, b = null;
+ 
+        // construct the first list
+        for (int i = 3; i >= 0; i--) {
+            a = new Node(i, a);
+        }
+ 
+        // construct the second list
+        for (int i = 10; i >= 4; i--) {
+            b = new Node(i, b);
+        }
+ 
+        // print both lists
+        printList("First List: ", a);
+        printList("Second List: ", b);
+ 
+        Node[] arr = merge(a, b);
+        a = arr[0];
+        b = arr[1];
+ 
+        System.out.println("\nAfter Merge: \n");
+ 
+        printList("First List: ", a);
+        printList("Second List: ", b);
+    }
+}
+
+Output:
+
+First List: 0 —> 1 —> 2 —> 3 —> null
+Second List: 4 —> 5 —> 6 —> 7 —> 8 —> 9 —> 10 —> null
+ 
+After Merge:
+ 
+First List: 0 —> 4 —> 1 —> 5 —> 2 —> 6 —> 3 —> 7 —> null
+Second List: 8 —> 9 —> 10 —> null
