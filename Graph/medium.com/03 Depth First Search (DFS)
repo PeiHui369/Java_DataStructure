@@ -11,6 +11,17 @@ Preorder: visit each node before its children.
 Postorder: visit each node after its children.
 Inorder (for binary trees only): visit left subtree, node, right subtree.
 
+#
+https://www.techiedelight.com/dfs-interview-questions/
+- Applications of DFS
+1. Finding connected components in a graph.
+2. Topological sorting in a DAG(Directed Acyclic Graph).
+3. Finding 2/3–(edge or vertex)–connected components.
+4. Finding the bridges of a graph.
+5. Finding strongly connected components.
+6. Solving puzzles with only one solution, such as mazes.
+7. Finding biconnectivity in graphs and many more…
+
 ---------------------------------
 @ Recursive
 
