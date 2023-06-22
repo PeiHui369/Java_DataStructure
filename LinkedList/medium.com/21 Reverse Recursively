@@ -1,0 +1,106 @@
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data) {
+        this.data = data;
+    }
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+        System.out.println("null");
+    }
+ 
+    // Helper function to insert a new node at the beginning of the linked list
+    public static Node push(Node head, int data)
+    {
+        Node node = new Node(data);
+        node.next = head;
+        return node;
+    }
+ 
+    // Recursive function to reverse a given linked list. It reverses the
+    // given linked list by fixing the head pointer and then `.next`
+    // pointers of every node in reverse order
+    public static Node reverse(Node curr, Node prev, Node head)
+    {
+        // base case: end of the list reached
+        if (curr == null)
+        {
+            // fix head pointer
+            head = prev;
+            return head;
+        }
+ 
+        // recur for the next node and pass the current node as a previous node
+        head = reverse(curr.next, curr, head);
+ 
+        // fix current node (nodes following it are already fixed)
+        curr.next = prev;
+ 
+        return head;
+    }
+ 
+    // The function to reverse a given linked list which takes a
+    // reference to the head node
+    public static Node reverse(Node head) {
+        return reverse (head, null, head);
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 3, 4, 5, 6 };
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >=0; i--) {
+            head = push(head, keys[i]);
+        }
+ 
+        head = reverse(head);
+        printList(head);
+    }
+}
+
+=================================================
+
+Initially, we have a linked list with the following structure:
+
+```
+1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null
+```
+
+After calling the `reverse()` function with the head of the linked list:
+
+1. The `reverse()` function is called recursively with `head`, `null`, and `head` as arguments. This helps maintain a reference to the original head of the linked list and keeps track of the current node and its previous node.
+2. Inside the `reverse()` function:
+   - The base case is checked. If the current node (`curr`) is null, we have reached the end of the list. At this point, the `prev` node becomes the new head, and we return it to the previous recursive call.
+   - The function recursively calls `reverse()` with the next node (`curr.next`) as the new current node, the current node (`curr`) as the new previous node, and the original head (`head`) as a reference.
+   - This recursive call continues until the base case is reached.
+3. Once the base case is reached, the recursive calls start returning.
+   - The new head of the reversed list is assigned to the `head` variable.
+   - The `curr.next` pointer is set to the `prev` node, effectively reversing the direction of the pointer.
+4. The reversed list is returned back to the initial function call.
+5. Finally, the `printList()` function is called to print the reversed list:
+   - The linked list is traversed, and each element is printed followed by an arrow (`->`).
+   - The null at the end of the list is printed, indicating the end of the reversed list.
+
+The final output will be:
+
+```
+6 -> 5 -> 4 -> 3 -> 2 -> 1 -> null
+```
+
+This shows how the modified code successfully reverses the linked list using recursion and maintains the new head of the reversed list.
