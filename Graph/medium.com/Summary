@@ -273,3 +273,65 @@ public static int DFS(Graph graph, int v, boolean[] discovered, int[] arrival, i
         // call DFS procedure
         return DFS(graph, src, discovered, color);
     }
+
+@07 Topological Sort Algorithm for DAG
+// Perform DFS on the graph and set the departure time of all
+    // vertices of the graph
+    static int DFS(Graph graph, int v, boolean[] discovered,
+                   int[] departure, int time)
+    {
+        // mark the current node as discovered
+        discovered[v] = true;
+ 
+        // set the arrival time of vertex `v`
+        time++;
+ 
+        // do for every edge (v, u)
+        for (int u: graph.adjList.get(v))
+        {
+            // if `u` is not yet discovered
+            if (!discovered[u]) {
+                time = DFS(graph, u, discovered, departure, time);
+            }
+        }
+ 
+        // ready to backtrack
+        // set departure time of vertex `v`
+        departure[time] = v;
+        time++;
+ 
+        return time;
+    }
+ 
+    // Function to perform a topological sort on a given DAG
+    public static void doTopologicalSort(Graph graph, int n)
+    {
+        // departure[] stores the vertex number using departure time as an index
+        int[] departure = new int[2*n];
+        Arrays.fill(departure, -1);
+ 
+        /* If we had done it the other way around, i.e., fill the array
+           with departure time using vertex number as an index, we would
+           need to sort it later */
+ 
+        // to keep track of whether a vertex is discovered or not
+        boolean[] discovered = new boolean[n];
+        int time = 0;
+ 
+        // perform DFS on all undiscovered vertices
+        for (int i = 0; i < n; i++)
+        {
+            if (!discovered[i]) {
+                time = DFS(graph, i, discovered, departure, time);
+            }
+        }
+ 
+        // Print the vertices in order of their decreasing
+        // departure time in DFS, i.e., in topological order
+        for (int i = 2*n - 1; i >= 0; i--)
+        {
+            if (departure[i] != -1) {
+                System.out.print(departure[i] + " ");
+            }
+        }
+    }
