@@ -1,0 +1,275 @@
+// A class to store a graph edge
+@ Directed
+class Edge
+{
+    int source, dest;
+ 
+    public Edge(int source, int dest)
+    {
+        this.source = source;
+        this.dest = dest;
+    }
+}
+
+// A class to represent a graph object
+class Graph
+{
+    // A list of lists to represent an adjacency list
+    List<List<Integer>> adjList = null;
+ 
+    // Constructor
+    Graph(List<Edge> edges, int n)
+    {
+        adjList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjList.add(new ArrayList<>());
+        }
+ 
+        // add edges to the undirected graph
+        for (Edge edge: edges)
+        {
+            int src = edge.source;
+            int dest = edge.dest;
+ 
+            adjList.get(src).add(dest);
+            adjList.get(dest).add(src);
+        }
+
+        //# add edges to the directed graph
+        for (Edge edge: edges) {
+            adjList.get(edge.source).add(edge.dest);
+        } //#
+    }
+}
+
+public static void main(String[] args) {
+        // List of graph edges as per the above diagram
+        List<Edge> edges = Arrays.asList(
+                new Edge(1, 2), new Edge(1, 7), new Edge(1, 8), new Edge(2, 3),
+                new Edge(2, 6), new Edge(3, 4), new Edge(3, 5), new Edge(8, 9),
+                new Edge(8, 12), new Edge(9, 10), new Edge(9, 11)
+            );
+ 
+        // total number of nodes in the graph (labelled from 0 to 12)
+        int n = 13;
+ 
+        // build a graph from the given edges
+        Graph graph = new Graph(edges, n);
+...
+}
+
+@ Weighted
+class Edge{
+    int src, dest, weight;
+    Edge(int src, int dest, int weight)
+    {
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+    }
+}
+
+class Node{
+    int value, weight;
+    Node(int value, int weight){
+        this.value = value;
+        this.weight = weight;
+    }
+    @Override
+    public String toString(){
+        return this.value + " (" + this.weight + ")";
+    }
+}
+
+@ 03 DFS (U)
+https://www.techiedelight.com/dfs-interview-questions/
+- Applications of DFS
+1. Finding connected components in a graph.
+2. Topological sorting in a DAG(Directed Acyclic Graph).
+3. Finding 2/3–(edge or vertex)–connected components.
+4. Finding the bridges of a graph.
+5. Finding strongly connected components.
+6. Solving puzzles with only one solution, such as mazes.
+7. Finding biconnectivity in graphs and many more…
+
+//Function to perform DFS traversal on the graph
+    public static void DFS(Graph graph, int v, boolean[] discovered){
+        //mark the current node as discovered
+        discovered[v] = true;
+        //print the current node
+        System.out.print(v + " ");
+        //do for every edge (v,u)
+        for (int u : graph.adjList.get(v)){
+            //if 'u' is not yet discovered
+            if(!discovered[u]){
+                DFS(graph, u, discovered);
+            }
+        }
+    }
+
+    /* Main
+        // to keep track of whether a vertex is discovered or not
+        boolean[] discovered = new boolean[n];
+
+        // Perform DFS traversal from all undiscovered nodes to
+        // cover all connected components of a graph
+        for (int i = 0; i < n; i++)
+        {
+            if (!discovered[i]) {
+                DFS(graph, i, discovered);
+            }
+        }
+     */
+
+/* Iterative
+// Perform iterative DFS on graph starting from vertex `v`
+    public static void iterativeDFS(Graph graph, int v, boolean[] discovered)
+    {
+        // create a stack used to do iterative DFS
+        Stack<Integer> stack = new Stack<>();
+ 
+        // push the source node into the stack
+        stack.push(v);
+ 
+        // loop till stack is empty
+        while (!stack.empty())
+        {
+            // Pop a vertex from the stack
+            v = stack.pop();
+ 
+            // if the vertex is already discovered yet, ignore it
+            if (discovered[v]) {
+                continue;
+            }
+ 
+            // we will reach here if the popped vertex `v` is not discovered yet;
+            // print `v` and process its undiscovered adjacent nodes into the stack
+            discovered[v] = true;
+            System.out.print(v + " ");
+ 
+            // do for every edge (v, u)
+            List<Integer> adjList = graph.adjList.get(v);
+            for (int i = adjList.size() - 1; i >= 0; i--)
+            {
+                int u = adjList.get(i);
+                if (!discovered[u]) {
+                    stack.push(u);
+                }
+            }
+        }
+    }
+ */
+
+@04 Arrival & Departure Time in DFS （D)
+#Applications of finding Arrival and Departure Time:
+1. Topological sorting in a DAG(Directed Acyclic Graph).
+2. Finding 2/3–(edge or vertex)–connected components.
+3. Finding bridges in graphs.
+4. Finding biconnectivity in graphs.
+5. Detecting cycle in directed graphs.
+6. Tarjan’s algorithm to find strongly connected components, and many more…
+
+// Function to perform DFS traversal on the graph on a graph
+public static int DFS(Graph graph, int v, boolean[] discovered, int[] arrival, int[] departure, int time){
+        // set the arrival time of vertex `v`
+        arrival[v] = ++time;
+ 
+        // mark vertex as discovered
+        discovered[v] = true;
+ 
+        for (int i: graph.adjList.get(v))
+        {
+            if (!discovered[i]) {
+                time = DFS(graph, i, discovered, arrival, departure, time);
+            }
+        }
+ 
+        // set departure time of vertex `v`
+        departure[v] = ++time;
+ 
+        return time;
+    }
+ 
+
+/* Main
+        // array to store the arrival time of vertex
+        int[] arrival = new int[n];
+ 
+        // array to store the departure time of vertex
+        int[] departure = new int[n];
+ 
+        // mark all the vertices as not discovered
+        boolean[] discovered = new boolean[n];
+        int time = -1;
+ 
+        // Perform DFS traversal from all undiscovered nodes to
+        // cover all unconnected components of a graph
+        for (int i = 0; i < n; i++)
+        {
+            if (!discovered[i]) {
+                time = DFS(graph, i, discovered, arrival, departure, time);
+            }
+        }
+ 
+        // print arrival and departure time of each vertex in DFS
+        for (int i = 0; i < n; i++)
+        {
+            System.out.println("Vertex " + i + " (" + arrival[i] + ", " +
+                departure[i] + ")");
+        }
+    }
+*/
+
+@06 Determine graph is Bipartite using DFS
+// Perform DFS on the graph starting from vertex `v`
+    public static boolean DFS(Graph graph, int v, boolean[] discovered,
+                            boolean[] color)
+    {
+        // do for every edge (v, u)
+        for (int u: graph.adjList.get(v))
+        {
+            // if vertex `u` is explored for the first time
+            if (discovered[u] == false)
+            {
+                // mark the current node as discovered
+                discovered[u] = true;
+                // current node has the opposite color of that its parent
+                color[u] = !color[v];
+ 
+                // if DFS on any subtree rooted at `v` returns false
+                if (DFS(graph, u, discovered, color) == false) {
+                    return false;
+                }
+            }
+            // if the vertex has already been discovered and
+            // the color of vertex `u` and `v` are the same, then
+            // the graph is not bipartite
+            else if (color[v] == color[u]) {
+                return false;
+            }
+        }
+ 
+        return true;
+    }
+ 
+    // Function to check if a graph is Bipartite using DFS
+    public static boolean isBipartite(Graph graph)
+    {
+        int n = graph.n;
+ 
+        // to keep track of whether a vertex is discovered or not
+        boolean[] discovered = new boolean[n];
+ 
+        // keep track of the color assigned (0 or 1) to each vertex in DFS
+        boolean[] color = new boolean[n];
+ 
+        // start from any node as the graph is connected and undirected
+        int src = 0;
+ 
+        // mark the source vertex as discovered and set its color to 0
+        discovered[src] = true;
+        color[src] = false;
+ 
+        // call DFS procedure
+        return DFS(graph, src, discovered, color);
+    }
