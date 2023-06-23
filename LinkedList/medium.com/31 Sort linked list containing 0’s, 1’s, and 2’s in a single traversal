@@ -1,0 +1,121 @@
+Input:  0 —> 1 —> 2 —> 2 —> 1 —> 0 —> 0 —> 2 —> 0 —> 1 —> 1 —> 0 —> NULL
+Output: 0 —> 0 —> 0 —> 0 —> 0 —> 1 —> 1 —> 1 —> 1 —> 2 —> 2 —> 2 —> NULL
+
+A simple solution would be to count the total number of 0's, 1's, and 2's present in the linked list, 
+traverse the linked list, 
+and put them back in the correct order. 
+The problem with this approach is that we need to do two traversals of the list, 
+which violates the problem constraints.
+
+We can solve this problem in a single traversal of the list. 
+The idea is to maintain three-pointers zeros, ones, and twos. 
+Then, traverse the list from head to end and move each node to the corresponding list depending on its value. 
+Finally, combine all three lists at the end and fix the head pointer.
+
+----------------------------------------
+
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+ 
+    Node() {}
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+ 
+    // Function to sort linked list containing 0's, 1's, and 2's in a single traversal
+    public static Node sortList(Node head)
+    {
+        // base case
+        if (head == null || head.next == null) {
+            return head;
+        }
+ 
+        // maintain three dummy nodes
+        Node first = new Node(), second = new Node(), third = new Node();
+ 
+        // maintain three references
+        Node zero = first, one = second, two = third;
+ 
+        // traverse the list
+        Node curr = head;
+        while (curr != null)
+        {
+            if (curr.data == 0)
+            {
+                zero.next = curr;
+                zero = zero.next;
+            }
+            else if (curr.data == 1)
+            {
+                one.next = curr;
+                one = one.next;
+            }
+            else {
+                two.next = curr;
+                two = two.next;
+            }
+            curr = curr.next;
+        }
+ 
+        // combine lists containing 0's, 1's, and 2's
+        zero.next = (second.next != null)? (second.next): (third.next);
+        one.next = third.next;
+        two.next = null;
+ 
+        // change head
+        return first.next;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 0, 0, 1, 2, 1, 2, 1 };
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        head = sortList(head);
+        printList(head);
+    }
+}
+
+=========================
+/*
+zero.next = curr;
+zero = zero.next
+zero.next = curr; assigns the current node (curr) to the next reference of zero. This essentially adds the current node to the end of the sublist for nodes with a data value of 0.
+
+zero = zero.next; then updates the zero reference to point to the newly added node. This step is important to ensure that subsequent nodes with a data value of 0 are appended correctly to the sublist.
+*/
+
+By performing these steps in a loop while traversing the original linked list, the code segregates the nodes based on their data values (0, 1, or 2) and creates three separate sublists: one for nodes with a data value of 0, one for nodes with a data value of 1, and one for nodes with a data value of 2.
+
+Finally, at the end of the loop, the code connects these sublists together to form a single sorted linked list by adjusting the next references accordingly. The line zero.next = (second.next != null) ? (second.next) : (third.next); connects the sublist for nodes with a data value of 0 to either the sublist for nodes with a data value of 1 or the sublist for nodes with a data value of 2, depending on whether the sublist for nodes with a data value of 1 is empty or not. Similarly, one.next = third.next; connects the sublist for nodes with a data value of 1 to the sublist for nodes with a data value of 2.
+
+The line two.next = null; ensures that the sublist for nodes with a data value of 2 ends with null, indicating the end of the sorted linked list.
+
+Finally, the method returns first.next, which is the head of the sorted linked list.
