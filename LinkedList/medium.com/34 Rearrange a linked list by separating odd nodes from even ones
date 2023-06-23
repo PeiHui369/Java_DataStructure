@@ -1,0 +1,282 @@
+Given a linked list, rearrange it by separating odd nodes from even ones. 
+All even nodes should come before all odd nodes in the output list, 
+and the relative order of even and odd nodes should be maintained.
+
+For example, consider list {1, 2, 3, 4, 5, 6, 7}. 
+Rearranging it should yield {2, 4, 6, 1, 3, 5, 7}.
+
+1. Using Iteration
+
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+ 
+    // Rearrange a given linked list by separating odd nodes
+    // from even ones and maintaining their relative order.
+    // This approach does not use any dummy node.
+    public static Node rearrangeEvenOdd(Node head)
+    {
+        Node odd = null, oddTail = null;
+        Node even = null, evenTail = null;
+        Node curr = head;
+ 
+        while (curr != null)
+        {
+            if ((curr.data & 1) != 0)        // current node is odd
+            {
+                // handle head for the first odd node
+                if (odd == null) {
+                    odd = oddTail = curr;
+                }
+                else {
+                    oddTail.next = curr;
+                    oddTail = oddTail.next;
+                }
+            }
+            else    // current node is even
+            {
+                // handle head for the first even node
+                if (even == null) {
+                    even = evenTail = curr;
+                }
+                else {
+                    evenTail.next = curr;
+                    evenTail = curr;
+                }
+            }
+            curr = curr.next;
+        }
+ 
+        // if the list contains at least one even node
+        if (even != null)
+        {
+            head = even;
+            evenTail.next = odd;
+        }
+        // special case – list contains all odd nodes
+        else {
+            head = odd;
+        }
+ 
+        // null to terminate the list; otherwise, it will go into an infinite loop
+        if (oddTail != null) {
+            oddTail.next = null;
+        }
+ 
+        return head;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        head = rearrangeEvenOdd(head);
+        printList(head);
+    }
+}
+Output:
+
+2 —> 4 —> 6 —> 8 —> 10 —> 1 —> 3 —> 5 —> 7 —> 9 —> null
+
+------------------------------------------------------------
+2. Using Dummy Nodes
+We can simplify the above code by using two temporary dummy nodes as the odd and even list and 
+maintaining two pointers that always point to the last node in individual lists, 
+so appending new nodes is easy. 
+The dummy node gives the tail something to point to initially when the result list is empty. 
+This dummy node is efficient since it is only temporary, 
+and it is allocated in the stack. 
+The loop proceeds, removing nodes from the original list and adding it at the tail of the even or odd list.
+When we are done, rearrange the pointers so that all odd nodes follow all even nodes.
+
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+ 
+    Node() {}
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+ 
+    // Rearrange a given linked list by separating odd nodes
+    // from even ones and maintaining their relative order.
+    // This approach uses a dummy node
+    public static Node rearrangeEvenOdd(Node head)
+    {
+        Node odd = new Node(), even = new Node();
+        Node oddTail = odd, evenTail = even;
+ 
+        Node curr = head;
+ 
+        while (curr != null)
+        {
+            if ((curr.data & 1) != 0)
+            {
+                oddTail.next = curr;
+                oddTail = oddTail.next;
+            }
+            else {
+                evenTail.next = curr;
+                evenTail = curr;
+            }
+            curr = curr.next;
+        }
+ 
+        evenTail.next = odd.next;
+        oddTail.next = null;
+        return even.next;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        head = rearrangeEvenOdd(head);
+        printList(head);
+    }
+}
+
+------------------------------
+3. Recursion
+// A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+ 
+    Node() {}
+}
+ 
+class Main
+{
+    // Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+ 
+    // Recursive function to rearrange the list
+    public static Node rearrange(Node head, Node odd, Node even, Node oddRef)
+    {
+        // we have reached the end of the list
+        if (head == null)
+        {
+            // null terminate the list
+            odd.next = null;
+ 
+            // join even and odd sublist
+            even.next = oddRef.next;
+            return head;
+        }
+ 
+        // if the current node is odd
+        if ((head.data & 1) != 0)
+        {
+            odd.next = head;
+            rearrange(head.next, head, even, oddRef);
+        }
+ 
+        // if the current node is even
+        else {
+            even.next = head;
+            rearrange(head.next, odd, head, oddRef);
+        }
+ 
+        return head;
+    }
+ 
+    // Rearrange a given linked list by separating odd nodes
+    // from even ones and maintaining their relative order.
+    public static Node rearrangeEvenOdd(Node head)
+    {
+        Node odd = new Node();
+        Node even = new Node();
+ 
+        rearrange(head, odd, even, odd);
+        return even.next;
+    }
+ 
+    public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+ 
+        head = rearrangeEvenOdd(head);
+        printList(head);
+    }
+}
