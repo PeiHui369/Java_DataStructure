@@ -1,0 +1,157 @@
+For example,
+
+Input:  A —> B —> C —> B —> A —> null
+Output: The linked list is a palindrome
+ 
+Input:  A —> B —> C —> C —> B —> null
+Output: The linked list is not a palindrome
+
+The idea is to recursively traverse until the end of the linked list and construct a string out of the nodes’ characters in visited order. 
+Then as the recursion unfolds, build another string from the linked list nodes, but this time, the encountered order of processed nodes is the opposite, i.e., from the last node towards the head node. 
+If both constructed strings are equal, we can say that the linked list is a palindrome.
+
+// A Linked List Node
+class Node
+{
+    char data;
+    Node next;
+ 
+    Node(char ch)
+    {
+        this.data = ch;
+        this.next = null;
+    }
+}
+ 
+class Main
+{
+    // Construct 's1' and 's2' out of the given linked list with consecutive
+    // list elements in the forward and backward direction
+    public static void construct(Node head, StringBuilder s1, StringBuilder s2)
+    {
+        // base case
+        if (head == null) {
+            return;
+        }
+ 
+        s1.append(head.data);
+        construct(head.next, s1, s2);
+        s2.append(head.data);
+    }
+ 
+    // Function to check if a given linked list of characters is a palindrome
+    public static boolean isPalindrome(Node head)
+    {
+        // construct string 's1' and 's2' with consecutive elements of the linked list
+        // starting from the beginning and the end
+ 
+        StringBuilder s1 = new StringBuilder(), s2 = new StringBuilder();
+        construct(head, s1, s2);
+ 
+        // check if the linked list is a palindrome
+        return s1.toString().equals(s2.toString());
+    }
+ 
+    public static void main(String[] args)
+    {
+        Node head = new Node('A');
+        head.next = new Node('B');
+        head.next.next = new Node('C');
+        head.next.next.next = new Node('B');
+        head.next.next.next.next = new Node('A');
+ 
+        if (isPalindrome(head)) {
+            System.out.println("Linked List is a palindrome.");
+        }
+        else {
+            System.out.println("Linked List is not a palindrome.");
+        }
+    }
+}
+Download  Run Code
+
+Output:
+
+Linked List is a palindrome.
+
+
+------------------------------------------
+2. 
+We can even determine if a linked list is a palindrome or not without constructing a string out of characters. This can be done recursively by comparing the data at the first node with the last node, the data at the second node with the second last node, etc.
+
+We can do this with the use of two head pointers as parameters to the recursive function. The idea is to recursively advance the second pointer until the end of the linked list is reached. When the recursion unfolds, compare the character pointed by the first pointer with that of the second pointer. If at any point the characters don’t match, the linked list cannot be a palindrome. To keep the left pointer in sync with the right pointer, advance the left pointer to the next node after each recursive call.
+
+
+// A Linked List Node
+class Node
+{
+    char data;
+    Node next;
+ 
+    Node(char ch)
+    {
+        this.data = ch;
+        this.next = null;
+    }
+}
+ 
+class Main
+{
+    // Wrapper over `Node` class
+    static class NodeWrapper
+    {
+        public Node node;
+ 
+        NodeWrapper(Node node) {
+            this.node = node;
+        }
+    }
+ 
+    // Recursive function to check if a given linked list of characters is a palindrome
+    public static boolean isPalindrome(NodeWrapper left, Node right)
+    {
+        // Base case
+        if (right == null) {
+            return true;
+        }
+ 
+        // Return false on the first mismatch
+        if (!isPalindrome(left, right.next)) {
+            return false;
+        }
+ 
+        // Copy the left child
+        Node prev_left = left.node;
+ 
+        // Advance the left child to the next node.
+        // This change would reflect in the parent recursive calls.
+        left.node = left.node.next;
+ 
+        // For the linked list to be a palindrome, the character at the left
+        // node should match with the character at the right node
+        return (prev_left.data == right.data);
+    }
+ 
+    public static void main(String[] args)
+    {
+        Node head = new Node('A');
+        head.next = new Node('B');
+        head.next.next = new Node('C');
+        head.next.next.next = new Node('B');
+        head.next.next.next.next = new Node('A');
+ 
+        // Wrap node, so its reference can be changed inside `isPalindrome()`
+        NodeWrapper left = new NodeWrapper(head);
+ 
+        if (isPalindrome(left, head)) {
+            System.out.println("Linked List is a palindrome.");
+        }
+        else {
+            System.out.println("Linked List is not a palindrome.");
+        }
+    }
+}
+
+Output:
+
+Linked List is a palindrome.
