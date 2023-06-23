@@ -1,3 +1,55 @@
+#1 A Linked List Node
+class Node
+{
+    int data;
+    Node next;
+ 
+    Node(int data, Node next)
+    {
+        this.data = data;
+        this.next = next;
+    }
+
+    //Node() {} @31
+}
+
+#2 Print Singly
+// Helper function to print a given linked list
+    public static void printList(Node head)
+    {
+        Node ptr = head;
+        while (ptr != null)
+        {
+            System.out.print(ptr.data + " —> ");
+            ptr = ptr.next;
+        }
+ 
+        System.out.println("null");
+    }
+
+#2 Print Doubly
+// Helper function to print a doubly linked list
+    public static void printDoublyLinkedList(Node head)
+    {
+        while (head != null)
+        {
+            System.out.print(head.data + " —> ");
+            head = head.right;
+        }
+        System.out.println("null");
+    }
+
+#3 Main
+public static void main(String[] args)
+    {
+        // input keys
+        int[] keys = {1, 2, 3, 4, 5};
+ 
+        Node head = null;
+        for (int i = keys.length - 1; i >= 0; i--) {
+            head = new Node(keys[i], head);
+        }
+---------------------------------------------------------
 @26 Merge two sorted linked lists from their end
 
     // Function to merge two sorted lists from the end
@@ -126,43 +178,462 @@
     }
  
 @28 Move last node to front
-@29
-// Function to rearrange the linked list in a specific manner
-    public static void rearrange(Node head)
-    {
-        // empty list or one node
-        if (head == null || head.next == null) {
-            return;
-        }
- 
-        // create two dummy nodes
+
+
+@29 Rearrange linked list in a specific manner
+public static void rearrange (Node head) {
+        if (head == null || head.next == null) {return;}
         Node dummyFirst = new Node();
         Node dummySecond = new Node();
- 
-        // tail pointer for the first and second list
+        
         Node first = dummyFirst;
         Node second = dummySecond;
- 
-        Node curr = head;
- 
-        // iterate through the list and process two nodes at a time
-        while (curr != null)
-        {
-            // move the current node to the first list
+        
+        Node curr= head;
+        
+        while (curr != null) {
             first.next = curr;
             first = first.next;
- 
-            // move the next node to the second list
-            if (curr.next != null)
-            {
+            
+            if (curr.next != null) {
                 second.next = curr.next;
                 second = second.next;
                 curr = curr.next;
             }
             curr = curr.next;
         }
- 
-        // combine the first list with the second list
         first.next = dummySecond.next;
         second.next = null;
+    }
+
+@30 Detect cycle in a linked list (Floyd’s Cycle Detection Algorithm)
+1. Using Hashing
+ public static boolean detectCycle(Node head) {
+        Node curr = head;
+        Set<Node> set = new HashSet<>();
+        while (curr != null) {
+            if (set.contains(curr)) {return true;}
+            set.add(curr);
+            curr = curr.next;
+        }
+        return false;
+    }
+//Main: head.next.next.next.next.next = head.next.next (Insert Cycle)
+
+2. Floyd’s cycle detection algorithm
+    public static boolean detectCycle(Node head)
+    {
+        Node slow = head, fast = head;
+ 
+        while (fast != null && fast.next != null) 
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {return true;}
+        }
+        return false;
+    }
+
+@31 Sort linked list containing 0’s, 1’s, and 2’s in a single traversal
+    public static Node sortList(Node head){
+        if (head == null || head.next == null) {return head;}
+        Node first = new Node(), second = new Node(), third = new Node();
+        Node zero = first, one = second, two = third;
+        Node curr = head;
+        while (curr != null) {
+            if (curr.data == 0) {
+                zero.next = curr;
+                zero = zero.next;
+            }else if (curr.data == 1) {
+                one.next = curr;
+                one = one.next;
+            }else{
+                two.next = curr;
+                two = two.next;
+            }
+            curr = curr.next;
+        }
+        zero.next = (second.next!=null)? (second.next) : (third.next);
+        one.next = third.next;
+        two.next = null;
+        return first.next;
+    }
+
+@32 Remove duplicates from a linked list in a single traversal
+public static Node removeDuplicates(Node head) {
+        Node previous = null;
+        Node current = head;
+        Set<Integer> set = new HashSet<>();
+        while (current != null) {
+            if (set.contains(current.data)){
+                previous.next = current.next;
+            }else{
+                set.add(current.data);
+                previous = current;
+            }
+            current = previous.next;
+        }
+        return head;
+    }
+
+@33 Rearrange linked list so that it has alternating high and low values
+public static Node rearrange(Node head) {
+        if (head == null) {return null;}
+        Node prev = head;
+        Node curr = head.next;
+        while (curr != null) {
+            if (prev.data > curr.data) {
+                int temp = prev.data;
+                prev.data = curr.data;
+                curr.data = temp;
+            }
+            if (curr.next != null && curr.next.data > curr.data) {
+                int temp = curr.next.data;
+                curr.next.data = curr.data;
+                curr.data = temp;
+            }
+            prev = curr.next;
+            if (curr.next == null) {break;}
+            curr = curr.next.next;
+        }
+        return head;
+    }
+
+@34 
+1. Iteration
+public static Node rearrangeEvenOdd(Node head) {
+        Node odd = null, oddTail = null;
+        Node even = null, evenTail = null;
+        Node curr = head;
+
+        while (curr != null) {
+            if ((curr.data & 1) != 0) {
+                if (odd == null) {
+                    odd = oddTail = curr;
+                }else{
+                    oddTail.next = curr;
+                    oddTail = oddTail.next;
+                }
+            }else{
+                if (even == null) {
+                    even = evenTail = curr;
+                }else{
+                    evenTail.next = curr;
+                    evenTail = curr;
+                }
+            }
+            curr = curr.next;
+        }
+
+        if (even != null) {
+            head = even;
+            evenTail.next = odd;
+        }else{
+            head = odd;
+        }
+        if(oddTail != null) {
+            oddTail.next = null;
+        }
+        return head;
+    }
+2. Dummy Nodes
+3. Recursion
+public static Node rearrange(Node head, Node odd. Node even, Node oddRef) {
+        if (head == null) {
+            odd.next = null;
+            even.next = oddRef.next;
+            return head;
+        }
+        if ((head.data & 1) != 0) {
+            odd.next = head;
+            rearrange(head.next, head, even, oddRef);
+        }else{
+            even.next = head;
+            rearrange(head.next, odd, head, oddRef);
+        }
+        return head;
+    }
+    
+    public static Node rearrangeEvenOdd(Node head) {
+        Node odd = new Node();
+        Node even = new Node();
+        rearrange(head, odd, even, odd);
+        return even.next;
+    }
+
+@35 Calculate the height of a binary tree with leaf nodes forming a circular doubly linked list
+public static int height (Node node) {
+        if (node == null) {return 0;}
+        if ((node.left != null && node.left.right == node) && (node.right != null && node.right.left == node)) {
+            return 1;
+        }
+        return 1 + Math.max (height(node.left), height(node.right));
+    }
+
+@37 Recursively check if the linked list of characters is palindrome or not
+static class NodeWrapper {
+        public Node node;
+
+        NodeWrapper(Node node) {
+            this.node = node;
+        }
+    }
+        
+        public static boolean isPalindrome(NodeWrapper left, Node right) {
+            if (right == null) {return true;}
+            if (!isPalindrome(left, right.next)) {return false;}
+            Node prev_left = left.node;
+            left.node = left.node.next;
+            return (prev_left.data == right.data);
+        }
+    }
+
+@38 Merge two BSTs into a doubly-linked list in sorted order
+D
+
+@39 Remove redundant nodes from a path formed by a linked list
+class Node{
+    int x, y;
+    Node next;
+
+    Node(int x, int y, Node next) {
+        this.x = x;
+        this.y = y;
+        this.next = next;
+    }
+
+    public String toString() {
+        return ("(" + x + ", " + y + ")");
+    }
+}
+
+class Main {
+    public static Node removeNodes (Node head) {
+        Node curr = head;
+        while (curr != null && curr.next != null && curr.next.next != null) {
+            Node temp = curr.next.next;
+            if (curr.x == curr.next.x && curr.x == temp.x){
+                curr.next = temp;
+            }else if (curr.y == curr.next.y && curr.y == temp.y) {
+                curr.next = temp;
+            }else{
+                curr = curr.next;
+            }
+        }
+        return head;
+    }
+}
+
+@40 Add a single-digit number to a linked list representing a number
+ public static Node reverse (Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        head = prev;
+        return head;
+    }
+
+    public static Node addDigit (Node head, int digit) {
+        if (head == null) {return new Node(digit);}
+        head = reverse(head);
+        int carry = digit;
+        Node curr = head;
+        while (carry > 0) {
+            int sum = curr.data + carry;
+            curr.data = sum % 10;
+            carry = sum/10;
+            if(curr.next == null) {break;}
+            curr = curr.next;
+        }
+        if (carry > 0) {curr.next = new Node(carry);}
+        head = reverse (head);
+        return head;
+    }
+2. Recursion
+public static int add(Node head, int digit) {
+        if (head == null) {return digit;}
+        int carry = add(head.next, digit);
+        if (carry == 0) {return 0;}
+        int sum = head.data + carry;
+        head.data = sum%10;
+        return sum/19;
+    }
+
+    public static Node addDigit(Node head, int digit){
+        int carry = add(head, digit);
+        if (carry > 0) {head = push(head,carry);}
+        return head;
+    }
+
+@41 Reverse every alternate group of `k` nodes in a linked list
+1. Iteration
+ static class NodeWrapper
+    {
+        public Node node;
+ 
+        NodeWrapper(Node node) {
+            this.node = node;
+        }
+    }
+public static Node push(Node head, int data) {
+        Node node = new Node(data);
+        node.next = head;
+        head = node;
+        return head;
+    }
+
+    public static Node reverse(NodeWrapper curr, int k) {
+        Node prev = null;
+        while (curr.node != null && k-- > 0) {
+            Node next = curr.node.next;
+            curr.node.next = prev;
+            prev = curr.node;
+            curr.node = next;
+        }
+        return prev;
+    }
+
+    public static Node skipKNodes(NodeWrapper curr, int k) {
+        Node prev = null;
+        while (curr.node != null && k-- > 0) {
+            prev = curr.node;
+            curr.node = curr.node.next;
+        }
+        return prev;
+    }
+
+    public static Node reverseAlternatingKNodes(Node head, int k)
+    {
+        Node prev = null;
+        NodeWrapper curr = new NodeWrapper(head);
+        while (curr.node != null) {
+            Node lastNode = curr.node;
+            Node frontNode = reverse(curr, k);
+            if (prev == null) {
+                head = frontNode;
+            }
+            else {
+                prev.next = frontNode;
+            }
+            lastNode.next = curr.node;
+            prev = skipKNodes(curr, k);
+        }
+        return head;
+    }
+2. Recursion
+public static Node reverse(NodeWrapper curr, int k){
+        Node prev = null;
+        while (curr.node != null && k-- >0) {
+            Node next = curr.node.next;
+            curr.node.next = prev;
+            prev = curr.node;
+            curr.node = next;
+        }
+        return prev;
+    }
+
+    public static Node skipKNodes(Node curr, int k){
+        while (curr != null && k-- >0) {
+            curr = curr.next;
+        }
+        return curr;
+    }
+
+    public static Node reverseAlternatingKNodes(Node head, int k){
+        if (head == null) {return null;}
+        Node originalHead = head;
+        NodeWrapper curr = new NodeWrapper(head);
+        originalHead.next = current;
+        current = skipKNodes(current, k-1);
+        if (current != null) {
+            current.next = reverseAlternatingKNodes(current.next, k);
+        }
+        return head;
+    }
+
+@42 Determine whether a linked list is palindrome or not
+public static boolean isPalindrome(Node head) {
+        Stack<Integer> s = new Stack<>();
+        Node node = head;
+        while (node != null) {
+            s.push(node.data);
+            node = node.next;
+        }
+        node = head;
+        while (node != null) {
+            int top = s.pop();
+            if (top != node.data) {
+                return false;
+            }
+            node = node.next;
+        }
+        return true;
+    }
+
+@43 Reverse a Doubly Linked List
+1. Iterative
+public static Node push(Node head, int key){
+        Node node = new Node();
+        node.data = key;
+        node.prev = null;
+        node.next = head;
+
+        if (head != null) {head.prev = node;}
+        head = node;
+        return head;
+    }
+    
+    public static void swap(Node node){
+        Node prev = node.prev;
+        node.prev = node.next;
+        node.next = prev;
+    }
+    
+    public static Node reverseDDL(Node head){
+        Node prev = null;
+        Node curr = head;
+        
+        while (curr != null) {
+            swap(curr);
+            prev = curr;
+            curr = curr.prev;
+        }
+        if (prev != null) {head = prev;}
+        return head;
+    }
+
+2. Recursive
+    public static Node push(Node head, int key) {
+        Node node = new Node(key);
+        node.next = head;
+        if (head != null) {head.prev = node;}
+        head = node;
+        return head;
+    }
+
+    //swap() same as Iterative
+
+    public static Node reverse(Node head, Node curr){
+        if (curr.next == null) {
+            swap(curr);
+            head = curr;
+            return head;
+        }
+        swap(curr);
+        head = reverse(head, curr.prev);
+        return head;
+    }
+
+    public static Node reverseDDL(Node head){
+        if (head == null) {return head;}
+        Node curr = head;
+        head = reverse(head, curr);
+        return head;
     }
