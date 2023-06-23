@@ -1,0 +1,82 @@
+Write an algorithm to compute a binary tree’s height with leaf nodes forming a circular doubly linked list 
+where the leaf node’s left and right pointers will act as a previous and next pointer of the circular doubly linked list, respectively.
+
+For example, consider the following binary tree. 
+The leaf nodes are 7, 5, and 6, connected using the left and right pointers and form a circular doubly linked list.
+
+We know that the height of a binary tree is the total number of nodes present on the longest path from the root to a leaf node. 
+The idea is to traverse the tree in a postorder fashion and calculate the left and right subtree’s height. 
+The height of a subtree rooted at any node will be one more than the maximum height of its left and right subtree. 
+Recursively apply this property to all tree nodes in a bottom-up manner (postorder fashion) and return the maximum height of the subtree rooted at that node.
+
+For typical binary trees, the left and right children of a leaf node are null pointers. 
+But here, the left and right child of leaf nodes act like the previous and next pointer of the circular doubly linked list. 
+For a node to be a leaf node, check if its left’s right and right’s left are pointing to the node itself.
+
+// A class to store a binary tree node
+class Node
+{
+    int key;
+    Node left = null, right = null;
+ 
+    Node(int key) {
+        this.key = key;
+    }
+}
+ 
+class Main
+{
+    // Recursive function to calculate the height of a binary tree with
+    // leaf nodes forming a circular doubly linked list
+    public static int height(Node node)
+    {
+        // base case: if the node is null
+        if (node == null) {
+            return 0;
+        }
+ 
+        // node is a leaf if its left's right and right's left
+        // are pointing to the node itself
+        if ((node.left != null && node.left.right == node) &&
+                    (node.right != null && node.right.left == node)) {
+            return 1;
+        }
+ 
+        // recur for the left and right subtree and consider maximum depth
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+ 
+    public static void main(String[] args)
+    {
+        // construct the tree
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);      // leaf node
+        root.right.right = new Node(6);     // leaf node
+        root.left.left.left = new Node(7);  // leaf node
+ 
+        // construct a circular doubly linked list from leaves
+        Node first = root.left.left.left;
+        Node second = root.left.right;
+        Node third = root.right.right;
+ 
+        // set previous and next pointers of the linked list
+        // (left and right child of a binary tree node, respectively)
+        first.left = third;
+        first.right = second;
+ 
+        second.left = first;
+        second.right = third;
+ 
+        third.left = second;
+        third.right = first;
+ 
+        System.out.println("The height of the binary tree is " + height(root));
+    }
+}
+
+Output:
+
+The height of the binary tree is 4
